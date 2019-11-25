@@ -40,7 +40,7 @@ maine cb-init cb-clear
   [uncons drop] dip swap s set
 ] [rectangle-rec] def
 
-[random-rectangle-list rectangle-rec cb-box] [boxr] def
+[ rectangle-rec cb-box] [box] def
 
 # background-rectangle-list
 [[0] width push 0 push height push 
@@ -51,9 +51,6 @@ push
 255 push
 0 push
 ] [background-rectangle-list] def
-
-# background box
-[ rectangle-rec cb-box] [boxb] def
 
 # make a nice random composition of rectangles 
 [ [] background-rectangle-list push [random-rectangle-list push] boxes repeat] [comp] def
@@ -86,7 +83,7 @@ dup 255 16 << AND 16 >> swap drop
 #dup
 #decompress
 #rectangle-rec
-# [[0 250 0 150 255 255 255 255 0] [76 47 30 71 15 120 194 220 0] [8 127 84 56 144 182 70 187 0] [210 27 73 59 153 211 152 208 0] [156 92 47 90 181 240 152 194 0] [26 91 59 54 110 2 182 69 0] [108 101 19 63 223 52 219 255 0] [35 57 91 55 154 54 43 198 0]]
+
 
 # save this composition to storage
 [count store.get
@@ -94,9 +91,49 @@ dup 255 16 << AND 16 >> swap drop
 art swap str-append store.set] [save] def
 
 # draw the initail composition
-maine cb-init cb-clear 
-background-rectangle-list log
-comp dup log paint log
+ 
+[[0 250 0 150 0 0 0 255 0] 
+[106 63 9 52 252 76 58 67 0] 
+[27 210 33 85 77 146 42 98 0] 
+[41 194 20 111 242 202 157 105 0] 
+[107 61 44 1 145 65 68 230 0] 
+[8 14 2 147 215 151 177 2 0] 
+[37 18 18 15 255 42 40 38 0] 
+[77 128 44 33 93 161 5 139 0]
+]
+#comp
+dup
+# uncons swap box [uncons swap box] boxes repeat drop
+
+[pop compress '+' str-append] [bite] def
+[pop compress
+ [bite] dip str-append
+ [bite] dip str-append
+ [bite] dip str-append
+ [bite] dip str-append
+ [bite] dip str-append
+ [bite] dip str-append
+ [bite] dip str-append
+ [drop] dip] [zip] def
+
+['+' str-split
+ decompress [] cons
+[decompress] dip cons
+[decompress] dip cons
+[decompress] dip cons
+[decompress] dip cons
+[decompress] dip cons
+[decompress] dip cons
+[decompress] dip cons
+] [unzip] def
+
+ zip
+ dup
+ unzip
+ log
+dup
+ uncons swap box [uncons swap box] boxes repeat drop
+
 
 ['up Vote' log drop] [upVote] def
 ['down Vote' log drop] [dnVote] def
