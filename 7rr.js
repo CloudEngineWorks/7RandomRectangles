@@ -78,32 +78,10 @@ dup 255 16 << AND 16 >> swap drop
  [push] dip2 [push] dip push] 3 repeat] [decompress] def
 
 
-#random-rectangle-list dup
-#compress
-#dup
-#decompress
-#rectangle-rec
-
-
 # save this composition to storage
 [count store.get
 1 + dup count store.set
 art swap str-append store.set] [save] def
-
-# draw the initail composition
- 
-[[0 250 0 150 0 0 0 255 0] 
-[106 63 9 52 252 76 58 67 0] 
-[27 210 33 85 77 146 42 98 0] 
-[41 194 20 111 242 202 157 105 0] 
-[107 61 44 1 145 65 68 230 0] 
-[8 14 2 147 215 151 177 2 0] 
-[37 18 18 15 255 42 40 38 0] 
-[77 128 44 33 93 161 5 139 0]
-]
-#comp
-dup
-# uncons swap box [uncons swap box] boxes repeat drop
 
 [pop compress '+' str-append] [bite] def
 [pop compress
@@ -127,37 +105,26 @@ dup
 [decompress] dip cons
 ] [unzip] def
 
+7rr store.get not [[] 7rr store.set drop] if
+[{v:0 c:''}
+ comp
+ dup uncons swap box [uncons swap box] boxes repeat drop
  zip
- dup
- unzip
+ c set
+ 7rr store.get
+ swap push
+ 7rr store.set] [create-new] def
+
+ create-new
  log
-dup
- uncons swap box [uncons swap box] boxes repeat drop
+# dup
+# unzip
+# uncons swap box [uncons swap box] boxes repeat drop
 
 
-['up Vote' log drop] [upVote] def
-['down Vote' log drop] [dnVote] def
-[viewLTcount [1 goview] [cb-clear comp dup [cb-box] map drop] ifte ] [nextArt] def
-[-1 goview] [prevArt] def
-
-
-[drop dup abs 15 > [0 > [dnVote] [upVote] ifte] if] [vertical] def
-[dup abs 15 > [0 > [prevArt] [nextArt] ifte] if drop] [horizontal] def
-[depth 1 > [merge] if x get ox set y get oy set true inGesture set] [startGesture] def
-[inGesture get [ox get [x get] dip - 
- [oy get [y get] dip -] dip dup2 
-abs [abs] dip > [vertical] [horizontal] ifte] if]  [gesture2action] def
-[depth 1 > [merge gesture2action false inGesture set] if false inGesture set depth 1 > [[drop] dip] if] [endGesture] def
-
-[startGesture] [mousedown] maine subscribe
-[endGesture] [mouseup] maine subscribe
-#[endGesture] [mouseout] maine subscribe
-#[endGesture] [mouseleave] maine subscribe
-
-#[[drop drop] dip2] [pointerdown] maine subscribe
-#[[drop drop] dip2] [pointerup] maine subscribe
-#[[drop drop] dip2] [pointermove] maine subscribe
-#[[drop drop] dip2] [pointerleave] maine subscribe
+[drop 7rr store.get pop v get 1 + v set push 7rr store.set create-new] [mousedown] upVoteBtn subscribe
+[drop 7rr store.get pop v get 1 - v set push 7rr store.set create-new] [mousedown] dnVoteBtn subscribe
+[drop create-new] [mousedown] nextBtn subscribe
 
 # init view index
 count store.get not [0 count store.set] if
