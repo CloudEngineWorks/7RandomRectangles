@@ -55,9 +55,6 @@ push
 # make a nice random composition of rectangles 
 [ [] background-rectangle-list push [random-rectangle-list push] boxes repeat] [comp] def
 
-# paint the nice random composition of rectangles 
-[ pop boxb [pop boxr] boxes repeat] [paint] def
-
 # compress example input [253 254 255 2 1 0 10 20 30]
 [[pop 16 << swap pop 8 << swap pop swap [+ +] dip] 3 repeat
 drop
@@ -105,41 +102,58 @@ art swap str-append store.set] [save] def
 [decompress] dip cons
 ] [unzip] def
 
+[uncons swap box [uncons swap box] boxes repeat drop] [paint] def
+
+
 7rr store.get not [[] 7rr store.set drop] if
+# init view index
+7rr store.get list-length count store.set
+count store.get 1 - view store.set
+
 [{v:0 c:''}
  comp
- dup uncons swap box [uncons swap box] boxes repeat drop
+ dup paint
  zip
  c set
  7rr store.get
  swap push
- 7rr store.set] [create-new] def
+ 7rr store.set count store.get dup view store.set 1 + count store.set] [create-new] def
 
  create-new
- log
-# dup
-# unzip
-# uncons swap box [uncons swap box] boxes repeat drop
 
+ [7rr store.get view-index peek c get unzip paint] [show-view] def
 
-[drop 7rr store.get pop v get 1 + v set push 7rr store.set create-new] [mousedown] upVoteBtn subscribe
-[drop 7rr store.get pop v get 1 - v set push 7rr store.set create-new] [mousedown] dnVoteBtn subscribe
-[drop create-new] [mousedown] nextBtn subscribe
+[view store.get] [view-index] def
 
-# init view index
-count store.get not [0 count store.set] if
-view store.get not [count store.get view store.set] if
+[drop
+  7rr store.get 
+  view-index 1 + count store.get == 
+    [pop v get 1 + v set push 7rr store.set
+    ]
+    [view-index peek v get 1 + v set view-index poke 7rr store.set] 
+  ifte] [mousedown] upVoteBtn subscribe
 
-[ dup 0 <
-    [view store.get + view store.set 
-        art view store.get str-append store.get [cb-box] map]
-    [view store.get 
-        art view store.get str-append 
-    store.get + view store.set [cb-box] map]
-  ifte       
-] [goview] def
+[drop
+  7rr store.get 
+    view-index 1 + count store.get == 
+    [pop v get 1 - v set push 7rr store.set
+    ]
+    [view-index peek v get 1 - v set view-index poke 7rr store.set] 
+  ifte] [mousedown] dnVoteBtn subscribe
 
-[view store.get count store.get <] [viewLTcount] def
+[drop
+  view-index 0 >
+  [view store.get 1 - view store.set ]
+  if
+ show-view drop 
+] [mousedown] prevBtn subscribe
+
+[
+  view-index 1 + count store.get <
+  [view store.get 1 + view store.set show-view drop]
+  [create-new]
+  ifte
+] [mousedown] nextBtn subscribe
 
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
