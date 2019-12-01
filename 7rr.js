@@ -11,6 +11,7 @@ maine cb-init cb-clear
 [250] [width] def
 [150] [height] def
 [7] [boxes] def
+[36] [intBase] def
 
 # random rectangle data in list form
 [[]
@@ -53,14 +54,21 @@ push
 ] [background-rectangle-list] def
 
 # make a nice random composition of rectangles 
-[ [] background-rectangle-list push [random-rectangle-list push] boxes repeat] [comp] def
+
+[
+  x get 10 / 75 + x set
+  w get 10 / w set
+  y get 10 / y set
+  h get 10 / h set
+] [shrink] def
+[[] background-rectangle-list push [random-rectangle-list push] boxes repeat] [comp] def
 
 # compress example input [253 254 255 2 1 0 10 20 30]
 [[pop 16 << swap pop 8 << swap pop swap [+ +] dip] 3 repeat
 drop
-36 int2s 
-[36 int2s] dip 
-[36 int2s] dip2
+intBase int2s 
+[intBase int2s] dip 
+[intBase int2s] dip2
 ['-'] dip2
 ['-'] dip
 str-append str-append str-append str-append] [compress] def
@@ -68,7 +76,7 @@ str-append str-append str-append str-append] [compress] def
 ['-' str-split
  [] 
 [swap
-36 s2int 
+intBase s2int 
  dup 255 AND swap
 dup 255 8 << AND 8 >> swap
 dup 255 16 << AND 16 >> swap drop
@@ -103,6 +111,8 @@ art swap str-append store.set] [save] def
 ] [unzip] def
 
 [uncons swap box [uncons swap box] boxes repeat drop] [paint] def
+[uncons swap rectangle-rec shrink cb-box 
+  [uncons swap rectangle-rec shrink cb-box] boxes repeat drop] [mini-paint] def
 
 
 7rr store.get not [[] 7rr store.set drop] if
@@ -119,9 +129,8 @@ count store.get 1 - view store.set
  swap push
  7rr store.set count store.get dup view store.set 1 + count store.set] [create-new] def
 
- create-new
 
- [7rr store.get view-index peek c get unzip paint] [show-view] def
+ [7rr store.get view-index peek c get unzip mini-paint] [show-view] def
 
 [view store.get] [view-index] def
 
@@ -131,7 +140,12 @@ count store.get 1 - view store.set
     [pop v get 1 + v set push 7rr store.set
     ]
     [view-index peek v get 1 + v set view-index poke 7rr store.set] 
-  ifte] [mousedown] upVoteBtn subscribe
+  ifte
+  view-index 1 + count store.get <
+  [view store.get 1 + view store.set show-view drop]
+  [create-new]
+  ifte
+] [mousedown] upVoteBtn subscribe
 
 [drop
   7rr store.get 
@@ -139,13 +153,17 @@ count store.get 1 - view store.set
     [pop v get 1 - v set push 7rr store.set
     ]
     [view-index peek v get 1 - v set view-index poke 7rr store.set] 
-  ifte] [mousedown] dnVoteBtn subscribe
+  ifte
+  view-index 1 + count store.get <
+  [view store.get 1 + view store.set show-view drop]
+  [create-new]
+  ifte
+] [mousedown] dnVoteBtn subscribe
 
 [drop
   view-index 0 >
-  [view store.get 1 - view store.set ]
+  [view store.get 1 - view store.set show-view drop ]
   if
- show-view drop 
 ] [mousedown] prevBtn subscribe
 
 [
