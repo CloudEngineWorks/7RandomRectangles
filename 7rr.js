@@ -54,14 +54,13 @@ push
 ] [background-rectangle-list] def
 
 # make a nice random composition of rectangles 
-
-[
-  x get 10 / 75 + x set
-  w get 10 / w set
-  y get 10 / y set
-  h get 10 / h set
-] [shrink] def
 [[] background-rectangle-list push [random-rectangle-list push] boxes repeat] [comp] def
+
+#[ x get 10 / 75 + x set
+#  w get 10 / w set
+#  y get 10 / y set
+#  h get 10 / h set
+#] [shrink] def
 
 # compress example input [253 254 255 2 1 0 10 20 30]
 [[pop 16 << swap pop 8 << swap pop swap [+ +] dip] 3 repeat
@@ -111,8 +110,8 @@ art swap str-append store.set] [save] def
 ] [unzip] def
 
 [uncons swap box [uncons swap box] boxes repeat drop] [paint] def
-[uncons swap rectangle-rec shrink cb-box 
-  [uncons swap rectangle-rec shrink cb-box] boxes repeat drop] [mini-paint] def
+#[uncons swap rectangle-rec shrink cb-box 
+#  [uncons swap rectangle-rec shrink cb-box] boxes repeat drop] [mini-paint] def
 
 
 7rr store.get not [[] 7rr store.set drop] if
@@ -130,7 +129,7 @@ count store.get 1 - view store.set
  7rr store.set count store.get dup view store.set 1 + count store.set] [create-new] def
 
 
- [7rr store.get view-index peek c get unzip mini-paint] [show-view] def
+ [7rr store.get view-index peek c get unzip paint] [show-view] def
 
 [view store.get] [view-index] def
 
@@ -173,6 +172,8 @@ count store.get 1 - view store.set
   ifte
 ] [mousedown] nextBtn subscribe
 
+# kick off the ui with a new image
+create-new
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
 
