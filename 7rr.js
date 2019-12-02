@@ -60,8 +60,8 @@ push
 #  w get 10 / w set
 #  y get 10 / y set
 #  h get 10 / h set
-#] [shrink] def
-
+#] [shrink] def    
+      
 # compress example input [253 254 255 2 1 0 10 20 30]
 [[pop 16 << swap pop 8 << swap pop swap [+ +] dip] 3 repeat
 drop
@@ -112,7 +112,7 @@ art swap str-append store.set] [save] def
 [uncons swap box [uncons swap box] boxes repeat drop] [paint] def
 #[uncons swap rectangle-rec shrink cb-box 
 #  [uncons swap rectangle-rec shrink cb-box] boxes repeat drop] [mini-paint] def
-
+      
 
 7rr store.get not [[] 7rr store.set drop] if
 # init view index
