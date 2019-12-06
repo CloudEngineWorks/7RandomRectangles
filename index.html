@@ -6,6 +6,7 @@
   <script src="pounce/js/modules/str-module.js"></script>
   <script src="pounce/js/modules/list_module.js"></script>
   <script src="pounce/js/modules/rec_module.js"></script>
+  <script src="pounce/js/modules/publish_module.js"></script>
   <script src="pounce/js/modules/canvas_basic_module.js"></script>
 
   <script src="pounce/js/modules/subscription_module.js"></script>
@@ -17,71 +18,64 @@
     body {
       padding: 20px;
       font: 1em Helvetica Neue, Helvetica, Arial, sans-serif;
+      background-color: #dddddd;
     }
 
-    * {
-      box-sizing: border-box;
+    .main-page {
+      max-width: 800px;
     }
 
-    p {
-      margin: 0 0 1em 0;
+    @media screen and (min-width: 768px) {
+      .main-page {
+        padding-left: 90px;
+        padding-right: 90px;
+      }
     }
 
-    .container {
-      width: 688px;
-      border: 3px solid rgb(76, 76, 76);
-      background-color: rgba(35, 35, 35, .3);
-      border-radius: .5em;
-      padding: 5px;
-      display: grid;
-      grid-template-columns: 108px 108px 108px 108px 108px 108px;
-      grid-template-rows: 108px 108px 108px 108px 108px;
-      grid-gap: 5px;
+
+    .col-container {
+      display: flex;
+      flex-direction: column;
     }
 
-    .container>div {
-      padding: 10px;
+    .row-container {
+      display: flex;
+      flex-direction: row;
     }
 
     .title {
-      grid-column: 1 / 7;
-      grid-row: 1;
       background-color: rgba(76, 76, 76, .3);
       margin-block-start: 2px;
-      margin: 4px !important;
-      padding: 9px !important;
+      margin: 5px;
+      padding: 10px;
+      min-width: 160px;
     }
 
     .maine-canvas {
-      grid-column: 1 / 6;
-      grid-row: 2 / 5;
-      /* padding: 0px; */
+      margin: 5px 0 0 10px;
+    }
+
+    button {
+      padding: 24px 40px;
+      margin: 3px 70px 3px 5px;
     }
 
     .up-vote {
-      grid-column: 6;
-      grid-row: 2;
       background-color: rgba(76, 76, 76, .3);
       border: 2px solid rgba(76, 76, 76, .5);
     }
 
     .dn-vote {
-      grid-column: 6;
-      grid-row: 4;
       background-color: rgba(76, 76, 76, .3);
       border: 2px solid rgba(76, 76, 76, .5);
     }
 
     .next-please {
-      grid-column: 6;
-      grid-row: 3;
       background-color: rgba(76, 76, 76, .3);
       border: 2px solid rgba(76, 76, 76, .5);
     }
 
     .prev-please {
-      grid-column: 1;
-      grid-row: 5;
       background-color: rgba(76, 76, 76, .3);
       border: 2px solid rgba(76, 76, 76, .5);
     }
@@ -89,16 +83,24 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="col-container main-page">
 
-    <h2 class="title">7 Rectangles</h2>
-    <div class="maine-canvas"> 
-      <canvas style="width:520px; height:312px" id="maine"></canvas>
+    <div class="row-container">
+      <button class="dn-vote" id="minusOneBtn">not so good</button>
+      <button class="next-please" id="oneBtn">not too bad</button>
+      <button class="up-vote" id="twoBtn">a keeper</button>
     </div>
-    <button class="up-vote" id="upVoteBtn">up vote</button>
-    <button class="dn-vote" id="dnVoteBtn">down vote</button>
-    <button class="prev-please" id="prevBtn">prev</button>
-    <button class="next-please" id="nextBtn">next</button>
+    <div class="row-container">
+      <h2 class="title">7 Rectangles</h2>
+      <div class="maine-canvas">
+        <canvas style="width: 500px; height: 300px" id="maine"></canvas>
+      </div>
+      <div id="rating"></div>
+    </div>
+    <div class="row-container">
+      <button class="prev-please" id="prevBtn">wait, go back, let me see the one before</button>
+      <button class="next-please" id="nextBtn">ok, next one</button>
+    </div>
   </div>
   <script src="7rr.js"></script>
 </body>

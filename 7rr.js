@@ -5,6 +5,7 @@ canvas_basic_module import
 rec_module import
 list_module import
 subscription_module import
+publish_module import
 
 # init a pounce connection to a canvas tag with id 'maine'
 maine cb-init cb-clear
@@ -128,36 +129,48 @@ count store.get 1 - view store.set
  swap push
  7rr store.set count store.get dup view store.set 1 + count store.set] [create-new] def
 
+ [rating publish] [pub-v] def
 
- [7rr store.get view-index peek c get unzip paint] [show-view] def
+ [7rr store.get view-index peek v get pub-v c get unzip paint] [show-view] def
 
 [view store.get] [view-index] def
 
 [drop
   7rr store.get 
   view-index 1 + count store.get == 
-    [pop v get 1 + v set push 7rr store.set
-    ]
-    [view-index peek v get 1 + v set view-index poke 7rr store.set] 
+    [pop 2 v set push 7rr store.set]
+    [view-index peek 2 v set view-index poke 7rr store.set] 
   ifte
   view-index 1 + count store.get <
-  [view store.get 1 + view store.set show-view drop]
-  [create-new]
+    [view store.get 1 + view store.set show-view drop]
+    [create-new]
   ifte
-] [mousedown] upVoteBtn subscribe
+] [mousedown] twoBtn subscribe
+
+[drop
+  7rr store.get 
+  view-index 1 + count store.get == 
+    [pop 1 v set push 7rr store.set]
+    [view-index peek 1 v set view-index poke 7rr store.set] 
+  ifte
+  view-index 1 + count store.get <
+    [view store.get 1 + view store.set show-view drop]
+    [create-new]
+  ifte
+] [mousedown] oneBtn subscribe
 
 [drop
   7rr store.get 
     view-index 1 + count store.get == 
-    [pop v get 1 - v set push 7rr store.set
+    [pop -1 v set push 7rr store.set
     ]
-    [view-index peek v get 1 - v set view-index poke 7rr store.set] 
+    [view-index peek -1 v set view-index poke 7rr store.set] 
   ifte
   view-index 1 + count store.get <
   [view store.get 1 + view store.set show-view drop]
   [create-new]
   ifte
-] [mousedown] dnVoteBtn subscribe
+] [mousedown] minusOneBtn subscribe
 
 [drop
   view-index 0 >
