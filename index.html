@@ -57,7 +57,7 @@
 
     button {
       padding: 24px 40px;
-      margin: 3px 70px 3px 5px;
+      /* margin: 3px 70px 3px 5px; */
     }
 
     .up-vote {
@@ -79,6 +79,28 @@
       background-color: rgba(76, 76, 76, .3);
       border: 2px solid rgba(76, 76, 76, .5);
     }
+
+    .grid-of-3 {
+      display: grid;
+      grid-template-columns: 108px;
+      grid-template-rows: 108px 108px 108px;
+      grid-gap: 5px;
+    }
+
+    .grid-1 {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .grid-2 {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .grid-3 {
+      grid-column: 1;
+      grid-row: 3;
+    }
   </style>
 </head>
 
@@ -86,20 +108,25 @@
   <div class="col-container main-page">
 
     <div class="row-container">
-      <button class="dn-vote" id="minusOneBtn">not so good</button>
-      <button class="next-please" id="oneBtn">not too bad</button>
-      <button class="up-vote" id="twoBtn">a keeper</button>
-    </div>
-    <div class="row-container">
-      <h2 class="title">7 Rectangles</h2>
+      <div class="title">
+          <h2>7 Rectangles</h2>
+          <div id="view-number"></div>
+          <p id="instructions"></p>
+      </div>
       <div class="maine-canvas">
-        <canvas style="width: 500px; height: 300px" id="maine"></canvas>
+          <!-- style="width: 540px; height: 324px" -->
+        <canvas width="250" height="150" style="width: 540px; height: 324px" id="maine"></canvas>
       </div>
       <div id="rating"></div>
-    </div>
-    <div class="row-container">
-      <button class="prev-please" id="prevBtn">wait, go back, let me see the one before</button>
-      <button class="next-please" id="nextBtn">ok, next one</button>
+      <div class="col-container grid-of-3">
+        <button class="prev-please grid-2" id="prevBtn">prev</button>
+      </div>
+      <div class="col-container grid-of-3">
+        <button class="up-vote grid-1" id="plusOneBtn">a keeper</button>
+        <button class="next-please grid-2" id="nextBtn">next</button>
+        <button class="dn-vote grid-3" id="minusOneBtn">not so good</button>
+      </div>
+
     </div>
   </div>
   <script src="7rr.js"></script>

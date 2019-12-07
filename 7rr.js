@@ -42,7 +42,7 @@ maine cb-init cb-clear
   [uncons drop] dip swap s set
 ] [rectangle-rec] def
 
-[ rectangle-rec cb-box] [box] def
+[rectangle-rec cb-box] [box] def
 
 # background-rectangle-list
 [[0] width push 0 push height push 
@@ -58,11 +58,17 @@ push
 [[] background-rectangle-list push [random-rectangle-list push] boxes repeat] [comp] def
 
 #[ x get 10 / 75 + x set
-#  w get 10 / w set
-#  y get 10 / y set
-#  h get 10 / h set
-#] [shrink] def    
-      
+  #  w get 10 / w set
+  #  y get 10 / y set
+  #  h get 10 / h set
+  #] [shrink] def
+        
+[ x get 2 * x set
+  w get 2 * x set
+  y get 2 * y set
+  h get 2 * h set
+] [grow] def
+          
 # compress example input [253 254 255 2 1 0 10 20 30]
 [[pop 16 << swap pop 8 << swap pop swap [+ +] dip] 3 repeat
 drop
@@ -84,7 +90,7 @@ dup 255 16 << AND 16 >> swap drop
 
 
 # save this composition to storage
-[count store.get
+[total-count
 1 + dup count store.set
 art swap str-append store.set] [save] def
 
@@ -118,57 +124,43 @@ art swap str-append store.set] [save] def
 7rr store.get not [[] 7rr store.set drop] if
 # init view index
 7rr store.get list-length count store.set
-count store.get 1 - view store.set
+total-count 1 - view store.set
 
-[{v:0 c:''}
- comp
- dup paint
+[
+  total-count 100 <
+  [{v:0 c:''}
+ comp dup paint
  zip
  c set
  7rr store.get
  swap push
- 7rr store.set count store.get dup view store.set 1 + count store.set] [create-new] def
+ 7rr store.set total-count dup view store.set 1 + count store.set]
+ ["Here you are at the end of this exploration of random 2d comositions. click the 'prev' button to review all the compositions." disp-instr ]
+ifte
+] [create-new] def
 
  [rating publish] [pub-v] def
 
  [7rr store.get view-index peek v get pub-v c get unzip paint] [show-view] def
 
 [view store.get] [view-index] def
+[count store.get] [total-count] def
+
+[[v get] dip apply dup [v set] dip pub-v] [set-rating] def
+[drop
+  7rr store.get 
+  view-index 1 + total-count == 
+    [pop [1 +] set-rating push 7rr store.set]
+    [view-index peek [1 +] set-rating view-index poke 7rr store.set] 
+  ifte
+] [mousedown] plusOneBtn subscribe
 
 [drop
   7rr store.get 
-  view-index 1 + count store.get == 
-    [pop 2 v set push 7rr store.set]
-    [view-index peek 2 v set view-index poke 7rr store.set] 
-  ifte
-  view-index 1 + count store.get <
-    [view store.get 1 + view store.set show-view drop]
-    [create-new]
-  ifte
-] [mousedown] twoBtn subscribe
-
-[drop
-  7rr store.get 
-  view-index 1 + count store.get == 
-    [pop 1 v set push 7rr store.set]
-    [view-index peek 1 v set view-index poke 7rr store.set] 
-  ifte
-  view-index 1 + count store.get <
-    [view store.get 1 + view store.set show-view drop]
-    [create-new]
-  ifte
-] [mousedown] oneBtn subscribe
-
-[drop
-  7rr store.get 
-    view-index 1 + count store.get == 
-    [pop -1 v set push 7rr store.set
+    view-index 1 + total-count == 
+    [pop [1 -] set-rating push 7rr store.set
     ]
-    [view-index peek -1 v set view-index poke 7rr store.set] 
-  ifte
-  view-index 1 + count store.get <
-  [view store.get 1 + view store.set show-view drop]
-  [create-new]
+    [view-index peek [1 -] set-rating view-index poke 7rr store.set] 
   ifte
 ] [mousedown] minusOneBtn subscribe
 
@@ -176,17 +168,27 @@ count store.get 1 - view store.set
   view-index 0 >
   [view store.get 1 - view store.set show-view drop ]
   if
+  disp-view-index
 ] [mousedown] prevBtn subscribe
 
 [
-  view-index 1 + count store.get <
+  view-index 1 + total-count <
   [view store.get 1 + view store.set show-view drop]
   [create-new]
   ifte
+  disp-view-index
 ] [mousedown] nextBtn subscribe
+
+[view-index 1 + ' of ' str-append
+ total-count dup 100 swap - [', ' str-append str-append] dip str-append ' left to go' str-append
+ view-number publish] [disp-view-index] def
+
+[instructions publish] [disp-instr] def
 
 # kick off the ui with a new image
 create-new
+disp-view-index
+0 pub-v
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
 
