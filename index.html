@@ -57,7 +57,7 @@
 
     button {
       padding: 24px 40px;
-      /* margin: 3px 70px 3px 5px; */
+      margin: 3px;
     }
 
     .up-vote {
@@ -123,7 +123,7 @@
         <canvas width="250" height="150" style="width: 540px; height: 324px" id="maine"></canvas>
       </div>
       <div class="col-container grid-of-3">
-        <h2 class="score-board grid-1" id="up-vote-score"></h2>
+        <h2 class="score-board grid-1">your rating: <span id="up-vote-score"></span></h2>
         <button class="prev-please grid-2" id="prevBtn">prev</button>
         <h2 class="score-board grid-3" id="dn-vote-score"></h2>
       </div>
@@ -134,6 +134,43 @@
       </div>
 
     </div>
+    <h3>Any Feedback</h3>
+    <p>Since this is a just for fun experiment, and 
+      it was quickly 'thrown' up on the screen without much 'web' design. 
+      It is a rough draft to say the least. Looking beyond that,
+       there are ideas for implovements floating around. 
+       If you have any comments that might be helpful, 
+       please do send them in below, --Thanks </p>
+    <form name="7rectangles-feedback" method="POST" data-netlify="true">
+      <p>
+        <label>Your Name: <input type="text" name="name" /></label>   
+      </p>
+      <p>
+        <label>Your Email: <input type="email" name="email" /></label>
+      </p>
+      <p>
+        <label>Email me with updates: <select name="notify[]" >
+          <option value="onceAQuarter">Ok, but at most once a quarter</option>
+          <option value="newFeature">When ever there's a new feature</option>
+          <option value="No">No thank you</option>
+        </select></label>
+      </p>
+      <p>
+        <label>Your Role: <select name="role[]" multiple>
+          <option value="artist">Artist</option>
+          <option value="teacher">Teacher</option>
+          <option value="critic">Art Critic</option>
+          <option value="knows">I know what I like</option>
+          <option value="observer">Keen Observer</option>
+        </select></label>
+      </p>
+      <p>
+        <label>Feedback: <textarea name="message"></textarea></label>
+      </p>
+      <p>
+        <button type="submit">Send</button>
+      </p>
+    </form>
   </div>
   <script src="7rr.js"></script>
 </body>

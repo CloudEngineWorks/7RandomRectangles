@@ -129,6 +129,7 @@ art swap str-append store.set] [save] def
     7rr store.get
     swap push
     7rr store.set total-count dup view store.set 1 + count store.set
+    0 pub-v
   ]
   [view-index 100 >=
    [99 view store.set] if show-view
@@ -139,15 +140,15 @@ ifte
 
  [ dup dup
   dup 0 > 
-    [ '+' swap str-append up-vote-score publish]
-    [ drop '' up-vote-score publish]
+    [ '+' swap str-append str-dequote up-vote-score publish]
+    [ drop ' ' str-dequote up-vote-score publish]
   ifte
   dup 0 < 
-    [ '' str-append dn-vote-score publish]
-    [ drop '' dn-vote-score publish]
+    [ str-dequote dn-vote-score publish]
+    [ drop ' ' str-dequote dn-vote-score publish]
   ifte
   dup 0 == 
-    [ 'neutral' up-vote-score publish 'not rated' dn-vote-score publish]
+    [ 'neutral' str-dequote up-vote-score publish 'not rated' str-dequote dn-vote-score publish]
   if
   drop
   ] [pub-v] def
@@ -196,7 +197,7 @@ ifte
  total-count dup 100 swap - [', ' str-append str-append] dip str-append ' left to go' str-append
  view-number publish] [disp-view-index] def
 
-[instructions publish] [disp-instr] def
+[ str-dequote instructions publish] [disp-instr] def
 
 # init the store if needed
 7rr store.get not [[] 7rr store.set drop] if
