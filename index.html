@@ -52,7 +52,7 @@
     }
 
     .maine-canvas {
-      margin: 5px 0 0 10px;
+      margin: 5px 15px 0 10px;
     }
 
     button {
@@ -101,6 +101,11 @@
       grid-column: 1;
       grid-row: 3;
     }
+
+    .score-board {
+      text-align: center;
+      vertical-align: middle;
+    }
   </style>
 </head>
 
@@ -109,17 +114,18 @@
 
     <div class="row-container">
       <div class="title">
-          <h2>7 Rectangles</h2>
-          <div id="view-number"></div>
-          <p id="instructions"></p>
+        <h2>7 Rectangles</h2>
+        <div id="view-number"></div>
+        <p id="instructions"></p>
       </div>
       <div class="maine-canvas">
-          <!-- style="width: 540px; height: 324px" -->
+        <!-- style="width: 540px; height: 324px" -->
         <canvas width="250" height="150" style="width: 540px; height: 324px" id="maine"></canvas>
       </div>
-      <div id="rating"></div>
       <div class="col-container grid-of-3">
+        <h2 class="score-board grid-1" id="up-vote-score"></h2>
         <button class="prev-please grid-2" id="prevBtn">prev</button>
+        <h2 class="score-board grid-3" id="dn-vote-score"></h2>
       </div>
       <div class="col-container grid-of-3">
         <button class="up-vote grid-1" id="plusOneBtn">a keeper</button>

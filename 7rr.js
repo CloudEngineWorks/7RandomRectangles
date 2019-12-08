@@ -119,27 +119,38 @@ art swap str-append store.set] [save] def
 [uncons swap box [uncons swap box] boxes repeat drop] [paint] def
 #[uncons swap rectangle-rec shrink cb-box 
 #  [uncons swap rectangle-rec shrink cb-box] boxes repeat drop] [mini-paint] def
-      
-
-7rr store.get not [[] 7rr store.set drop] if
-# init view index
-7rr store.get list-length count store.set
-total-count 1 - view store.set
 
 [
   total-count 100 <
   [{v:0 c:''}
- comp dup paint
- zip
- c set
- 7rr store.get
- swap push
- 7rr store.set total-count dup view store.set 1 + count store.set]
- ["Here you are at the end of this exploration of random 2d comositions. click the 'prev' button to review all the compositions." disp-instr ]
+    comp dup paint
+    zip
+    c set
+    7rr store.get
+    swap push
+    7rr store.set total-count dup view store.set 1 + count store.set
+  ]
+  [view-index 100 >=
+   [99 view store.set] if show-view
+   "Here you are at the end of this exploration of random 2d compositions. click the 'prev' button to review change your ratings." disp-instr
+ ]
 ifte
 ] [create-new] def
 
- [rating publish] [pub-v] def
+ [ dup dup
+  dup 0 > 
+    [ '+' swap str-append up-vote-score publish]
+    [ drop '' up-vote-score publish]
+  ifte
+  dup 0 < 
+    [ '' str-append dn-vote-score publish]
+    [ drop '' dn-vote-score publish]
+  ifte
+  dup 0 == 
+    [ 'neutral' up-vote-score publish 'not rated' dn-vote-score publish]
+  if
+  drop
+  ] [pub-v] def
 
  [7rr store.get view-index peek v get pub-v c get unzip paint] [show-view] def
 
@@ -147,6 +158,7 @@ ifte
 [count store.get] [total-count] def
 
 [[v get] dip apply dup [v set] dip pub-v] [set-rating] def
+
 [drop
   7rr store.get 
   view-index 1 + total-count == 
@@ -169,6 +181,7 @@ ifte
   [view store.get 1 - view store.set show-view drop ]
   if
   disp-view-index
+  '' disp-instr
 ] [mousedown] prevBtn subscribe
 
 [
@@ -185,10 +198,16 @@ ifte
 
 [instructions publish] [disp-instr] def
 
+# init the store if needed
+7rr store.get not [[] 7rr store.set drop] if
+# init view index
+7rr store.get list-length dup 100 > [[] 7rr store.set drop drop 0] if count store.set
+total-count 1 - view store.set
+
 # kick off the ui with a new image
 create-new
 disp-view-index
-0 pub-v
+
 `;
 const out = pounce.run(Pounce_ast.parse(pl+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0];
 
