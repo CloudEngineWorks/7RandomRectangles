@@ -133,22 +133,22 @@ art swap str-append store.set] [save] def
   ]
   [view-index 100 >=
    [99 view store.set] if show-view
-   "Here you are at the end of this exploration of random 2d compositions. click the 'prev' button to review change your ratings." disp-instr
+   "Here you are at the end of this exploration of random 2-D compositions, one hundred of them. Click the 'prev' button to review and change your ratings." disp-instr
  ]
 ifte
 ] [create-new] def
 
  [ dup dup
   dup 0 > 
-    [ '+' swap str-append str-dequote up-vote-score publish]
-    [ drop ' ' str-dequote up-vote-score publish]
+    [ '+' swap str-append str-dequote up-vote-score content-publish]
+    [ drop ' ' str-dequote up-vote-score content-publish]
   ifte
   dup 0 < 
-    [ str-dequote dn-vote-score publish]
-    [ drop ' ' str-dequote dn-vote-score publish]
+    [ str-dequote dn-vote-score content-publish]
+    [ drop ' ' str-dequote dn-vote-score content-publish]
   ifte
   dup 0 == 
-    [ 'neutral' str-dequote up-vote-score publish 'not rated' str-dequote dn-vote-score publish]
+    [ 'neutral' str-dequote up-vote-score content-publish 'not rated' str-dequote dn-vote-score content-publish]
   if
   drop
   ] [pub-v] def
@@ -193,11 +193,18 @@ ifte
   disp-view-index
 ] [mousedown] nextBtn subscribe
 
+['display:block;' str-dequote style feedback-section attr-publish
+ 'display:none;' str-dequote style about-section attr-publish
+] [mousedown] feedbackBtn subscribe 
+['display:block;' str-dequote style about-section attr-publish
+ 'display:none;' str-dequote style feedback-section attr-publish
+] [mousedown] aboutBtn subscribe 
+
 [view-index 1 + ' of ' str-append
  total-count dup 100 swap - [', ' str-append str-append] dip str-append ' left to go' str-append
- view-number publish] [disp-view-index] def
+ view-number content-publish] [disp-view-index] def
 
-[ str-dequote instructions publish] [disp-instr] def
+[ str-dequote instructions content-publish] [disp-instr] def
 
 # init the store if needed
 7rr store.get not [[] 7rr store.set drop] if
