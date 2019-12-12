@@ -160,12 +160,19 @@ ifte
 
 [[v get] dip apply dup [v set] dip pub-v] [set-rating] def
 
+[
+  [] 
+  [v get 2 > [push] [drop] ifte ] reduce
+  log
+] [separate] def
+
 [drop
   7rr store.get 
   view-index 1 + total-count == 
     [pop [1 +] set-rating push 7rr store.set]
     [view-index peek [1 +] set-rating view-index poke 7rr store.set] 
   ifte
+  drop drop
 ] [mousedown] plusOneBtn subscribe
 
 [drop
@@ -175,6 +182,7 @@ ifte
     ]
     [view-index peek [1 -] set-rating view-index poke 7rr store.set] 
   ifte
+  drop drop
 ] [mousedown] minusOneBtn subscribe
 
 [drop
@@ -183,6 +191,7 @@ ifte
   if
   disp-view-index
   '' disp-instr
+  drop
 ] [mousedown] prevBtn subscribe
 
 [
@@ -191,6 +200,7 @@ ifte
   [create-new]
   ifte
   disp-view-index
+  drop drop
 ] [mousedown] nextBtn subscribe
 
 ['display:block;' str-dequote style feedback-section attr-publish
