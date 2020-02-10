@@ -24,7 +24,6 @@ maine cb-init cb-clear
  random 255 * 1 round push
  random 255 * 1 round push
  random 255 * 1 round push
- 0 push
 ] [random-rectangle-list] def
 
 # rectangle-rec (takes a list of data)
@@ -39,7 +38,7 @@ maine cb-init cb-clear
     [uncons swap] dip2 rolldown b set
     [uncons swap] dip2 rolldown 255 / 0.01 round a set
   color set
-  [uncons drop] dip swap s set
+  swap s set
 ] [rectangle-rec] def
 
 [rectangle-rec cb-box] [box] def
@@ -51,7 +50,6 @@ dup [push] dip
 dup [push] dip
 push
 255 push
-0 push
 ] [background-rectangle-list] def
 
 # make a nice random composition of rectangles 
@@ -63,31 +61,24 @@ push
   #  h get 10 / h set
   #] [shrink] def
         
-[ x get 2 * x set
-  w get 2 * x set
-  y get 2 * y set
-  h get 2 * h set
-] [grow] def
-          
-# compress example input [253 254 255 2 1 0 10 20 30]
-[[pop 16 << swap pop 8 << swap pop swap [+ +] dip] 3 repeat
-drop
-intBase int2s 
-[intBase int2s] dip 
-[intBase int2s] dip2
-['-'] dip2
-['-'] dip
-str-append str-append str-append str-append] [compress] def
+#[ x get 2 * x set
+#  w get 2 * x set
+#  y get 2 * y set
+#  h get 2 * h set
+#] [grow] def
 
-['-' str-split
- [] 
-[swap
-intBase s2int 
- dup 255 AND swap
-dup 255 8 << AND 8 >> swap
-dup 255 16 << AND 16 >> swap drop
- [push] dip2 [push] dip push] 3 repeat] [decompress] def
 
+[dup str-length 2 < ['0' swap str-append] if] [0pad2] def
+[
+  uncons [16 int2s 0pad2] dip
+  [uncons [16 int2s 0pad2 str-append] dip] 7 repeat
+  drop
+] [compress] def
+
+[[] swap
+ [str-first swap str-first swap [str-append 16 s2int push] dip] 8 repeat
+ drop
+] [decompress] def
 
 # save this composition to storage
 [total-count
@@ -103,7 +94,8 @@ art swap str-append store.set] [save] def
  [bite] dip str-append
  [bite] dip str-append
  [bite] dip str-append
- [drop] dip] [zip] def
+ [drop] dip
+] [zip] def
 
 ['+' str-split
  decompress [] cons

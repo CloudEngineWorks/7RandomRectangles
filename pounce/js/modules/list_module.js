@@ -83,11 +83,11 @@
             s.push(list);
           }
           else {
-            console.log({ 'word': 'un-cons', 'error': "unable to 'un-cons' from an empty list" });
+            console.log({ 'word': 'uncons', 'error': "unable to 'un-cons' from an empty list" }, list);
           }
         }
         else {
-          console.log({ 'word': 'un-cons', 'error': "unable to 'un-cons' from a non-list" });
+          console.log({ 'word': 'uncons', 'error': "unable to 'un-cons' from a non-list" }, list);
         }
         return [s];
       }
